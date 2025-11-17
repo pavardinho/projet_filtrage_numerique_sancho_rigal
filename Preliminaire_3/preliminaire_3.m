@@ -4,11 +4,11 @@ close all
 clear
 
 % Récupération d'un signal
-data = load('./Signaux_parole/fcno01fz.mat');
-signal = data.fcno01fz;
+data = load('./Signaux_parole/fcno04fz.mat');
+signal = data.fcno04fz;
 
-% Paamètres
-k0 = 300;
+% Paramètres
+k0 = 3000;
 
 % Création de h
 h = zeros(1, k0 + 1);
