@@ -7,8 +7,8 @@ clear
 data = load('../Signaux_parole/fcno01fz.mat');
 signal = data.fcno01fz;
 
-% Paamètres
-k0 = 300;
+% Paramètres
+k0 = 3000;
 
 % Création de h
 h = zeros(1, k0 + 1);
