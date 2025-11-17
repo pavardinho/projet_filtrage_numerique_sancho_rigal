@@ -70,7 +70,7 @@ welch = mean(perio, 1);
 f_welch = -0.5 : 1/L : 0.5 - 1/L;
 
 % Corrélogramme
-correlogramme = abs(fftshift(fft(cor_biased)));
+correlogramme = real(fftshift(fft(cor_biased)));
 
 figure;
 hold on

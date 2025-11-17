@@ -4,7 +4,7 @@ clear
 close all
 
 % Récupération d'un signal
-data = load('./Signaux_parole/fcno03fz.mat');
+data = load('../Signaux_parole/fcno03fz.mat');
 signal = data.fcno03fz;
 
 % Paramètes
