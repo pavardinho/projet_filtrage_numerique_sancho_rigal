@@ -15,24 +15,24 @@ for m = 1:M
     bbgc = sigma * randn(1, N);
 
     % % Periodogramme
-    len = N;
-    spectre_puissance = abs(fftshift(fft(bbgc))).^2/N;
+    % len = N;
+    % spectre_puissance = abs(fftshift(fft(bbgc))).^2/N;
 
     % Welch
-    % overlap = 0.5;
-    % K = 4;
-    % L = floor(N/(1+(K-1)*(1-overlap)));
-    % len = L;
-    % w = hann(L);
-    % U = sum(w.^2)/L;
-    % perio = [];
-    % for i=1:K
-    %     s = 1 + (i-1)*floor(L*(1-overlap));
-    %     e = s + L - 1;
-    %     x = bbgc(s : e).*w';
-    %     perio(i,:) = abs(fftshift(fft(x))).^2/(L*U);
-    % end
-    % spectre_puissance = mean(perio, 1);
+    overlap = 0.5;
+    K = 4;
+    L = floor(N/(1+(K-1)*(1-overlap)));
+    len = L;
+    w = hann(L);
+    U = sum(w.^2)/L;
+    perio = [];
+    for i=1:K
+        s = 1 + (i-1)*floor(L*(1-overlap));
+        e = s + L - 1;
+        x = bbgc(s : e).*w';
+        perio(i,:) = abs(fftshift(fft(x))).^2/(L*U);
+    end
+    spectre_puissance = mean(perio, 1);
 
     % DSP
     % len = N;

@@ -1,0 +1,68 @@
+clc
+clear
+close all
+
+% Récupération d'un signal
+data = load('../Signaux_parole/fcno03fz.mat');
+signal = data.fcno03fz;
+
+% Paramètes
+RSB_dB = 25;
+Fs = 8000;
+N = length(signal);
+
+taille_trame = 10000;
+recouvrement = 0.5;
+
+pas = taille_trame*(1-recouvrement);
+nb_trame = ceil((N - taille_trame) / pas) + 1;
+
+% Bruitage du signal
+signal_bruite = bruitage(signal, RSB_dB);
+
+fenetre = hann(taille_trame, 'periodic');
+trames = zeros(taille_trame, nb_trame);
+trames_rehaussees = zeros(taille_trame, nb_trame);
+id_deb = 1;
+for i = 1:nb_trame
+    id_fin = id_deb + taille_trame - 1;
+    % cas où la trame est trop courte : (on fait du 0 padding)
+    if id_fin > N
+        trame_actuelle = [signal_bruite(id_deb : end) ; zeros(id_fin - N, 1)];
+    
+    % cas où c'est bon
+    else 
+        trame_actuelle = [signal_bruite(id_deb : id_fin)];
+    end
+    trames(:, i) = trame_actuelle.* fenetre ; % on applique le fenêtrage à chaque trame
+
+    % Méthode 2.5 ici
+    Y = fft(trames(:,i));
+    Py = abs(Y).^2;
+    K = 10^(RSB_dB/10);
+    Puissance_signal = mean(signal_bruite.^2);
+    sigma_bruit_est = Puissance_signal / (K + 1);
+
+    Ps_estime = Py - sigma_bruit_est;
+    Ps_estime(Ps_estime < 0) = 0;
+
+    trames_rehaussees()
+
+    id_deb = id_deb + pas;
+end
+
+
+
+
+% Reconstruction du signal
+% signal_reconstruit = zeros((nb_trame - 1)*pas + taille_trame, 1);
+% 
+% id_deb1 = 1;
+% for i = 1:nb_trame
+%     id_fin1 = id_deb1 + taille_trame - 1;
+% 
+%     signal_reconstruit(id_deb1:id_fin1) = signal_reconstruit(id_deb1:id_fin1) + %Signal final%(:, i);
+% 
+%     id_deb1 = id_deb1 + pas;
+% end
+
